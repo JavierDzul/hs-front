@@ -33,3 +33,9 @@ export interface CardValidationResult {
   cardIsValid: boolean;
   cardReason: string;
 }
+
+export interface PaymentResult {
+  paymentSuccess: boolean;
+  paymentMessage: string;
+  paymentTotalInCents: number;
+}

@@ -3,6 +3,7 @@ import type {
   Product,
   CartViewData,
   CardValidationResult,
+  PaymentResult,
 } from "./types";
 
 const BASE = "/api";
@@ -82,5 +83,20 @@ export function validateCard(
   return request("/validate-card", {
     method: "POST",
     body: JSON.stringify({ cardNumber }),
+  });
+}
+
+// Payment
+
+export function submitPayment(
+  customerId: number,
+  cardNumber: string
+): Promise<PaymentResult> {
+  return request("/payment", {
+    method: "POST",
+    body: JSON.stringify({
+      paymentCustomerId: customerId,
+      paymentCardNumber: cardNumber,
+    }),
   });
 }

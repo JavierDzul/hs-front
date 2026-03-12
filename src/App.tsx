@@ -3,6 +3,7 @@ import CustomerPicker from "./components/CustomerPicker";
 import ProductList from "./components/ProductList";
 import CartView from "./components/CartView";
 import CardValidator from "./components/CardValidator";
+import PaymentForm from "./components/PaymentForm";
 import { getCart, addToCart, removeFromCart, clearCart } from "./api";
 import type { CartViewData } from "./types";
 import "./App.css";
@@ -11,12 +12,9 @@ export default function App() {
   const [customerId, setCustomerId] = useState<number | null>(null);
   const [cart, setCart] = useState<CartViewData | null>(null);
 
-  const refreshCart = useCallback(
-    (cid: number) => {
-      getCart(cid).then(setCart);
-    },
-    []
-  );
+  const refreshCart = useCallback((cid: number) => {
+    getCart(cid).then(setCart);
+  }, []);
 
   function handleSelectCustomer(cid: number) {
     setCustomerId(cid);
@@ -38,12 +36,24 @@ export default function App() {
     clearCart(customerId).then(setCart);
   }
 
+  function handlePaymentComplete() {
+    if (customerId === null) return;
+    refreshCart(customerId);
+  }
+
+  const cartIsEmpty = !cart || cart.cartItems.length === 0;
+
   return (
     <div className="app">
       <h1>🛒 Store</h1>
       <CustomerPicker selected={customerId} onSelect={handleSelectCustomer} />
       <ProductList customerId={customerId} onAddToCart={handleAddToCart} />
       <CartView cart={cart} onRemove={handleRemove} onClear={handleClear} />
+      <PaymentForm
+        customerId={customerId}
+        cartIsEmpty={cartIsEmpty}
+        onPaymentComplete={handlePaymentComplete}
+      />
       <CardValidator />
     </div>
   );
