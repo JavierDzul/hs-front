@@ -46,5 +46,6 @@ export default function App() {
       <CartView cart={cart} onRemove={handleRemove} onClear={handleClear} />
       <CardValidator />
     </div>
+    
   );
 }
